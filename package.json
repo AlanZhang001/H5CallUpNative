@@ -1,0 +1,27 @@
+{
+  "name": "h5callupnative",
+  "version": "1.0.0",
+  "description": "本文档用于介绍通过H5端唤起本地NN客户端的研究过程！",
+  "main": "tool-nativeSchema.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlanZhang001/H5CallUpNative.git"
+  },
+  "keywords": [
+    "h5",
+    "schema",
+    "native"
+  ],
+  "author": "alanzhang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlanZhang001/H5CallUpNative/issues"
+  },
+  "homepage": "https://github.com/AlanZhang001/H5CallUpNative#readme"
+}

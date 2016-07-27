@@ -20,15 +20,17 @@
 访问协议地址，目前有3种方式，以打开NN客户端登录页为例：
 
 1. **通过a标签打开**，点击标签是启动
-
-		<a href="ftnn:login">打开登录页</a>
+```
+	<a href="ftnn:login">打开登录页</a>
+```
 2. **通过iframe打开**，设置iframe.src即会启动
-
-		<iframe src="ftnn:login"></iframe>
+```
+	<iframe src="ftnn:login"></iframe>
+```
 3. **直接通过window.location 进行跳转**
-
-		window.location.href= "ftnn:login";
-
+```
+	window.location.href= "ftnn:login";
+```
 Android上注册schema协议，可以参考博文：[Android手机上实现WebApp直接调起NativeApp](https://www.baidufe.com/item/3444ee051f8edb361d12.html)
 
 >注：由于微信的白名单限制，无法通过schema来唤起本地app，只有白名单内的app才能通过微信浏览器唤醒，这个问题我目前没有找到合适的解决办法！
@@ -143,9 +145,9 @@ opera对于iframe.src和a.href的方式都能支持，所以对chrome及先关�
    - IOS上启动速度相对较快
 
 ## 相关代码
-对代码进行简单的封装，代码如下，在使用时需要针对当前的app做必要设置：
+对代码进行简单的封装，代码如下，在使用时需要针对当前的app做必要设置，采用UMD的写法：
 
-代码见<https://github.com/AlanZhang001/H5CallUpNative/blob/master/tool-nativeSchema.js> ;采用UMD的写法
+代码见[tool-nativeSchema.js](https://github.com/AlanZhang001/H5CallUpNative/blob/master/tool-nativeSchema.js)
 
 调用方式：
 

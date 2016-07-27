@@ -145,7 +145,7 @@ opera对于iframe.src和a.href的方式都能支持，所以对chrome及先关�
 ## 相关代码
 对代码进行简单的封装，代码如下，在使用时需要针对当前的app做必要设置：
 
-代码见<./tool-nativeSchema.js> ;采用UMD的写法
+代码见<https://github.com/AlanZhang001/H5CallUpNative/blob/master/tool-nativeSchema.js> ;采用UMD的写法
 
 调用方式：
 

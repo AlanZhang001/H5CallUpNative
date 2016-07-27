@@ -102,7 +102,7 @@
             // 如果未定义schema，则根据当前路径来映射
             if (!schema) {
                 schemaStr = AppConfig.HOME;
-            } 
+            }
 
             // 如果是安卓chrome浏览器，则通过intent方式打开
             if (isAndroidChrome) {

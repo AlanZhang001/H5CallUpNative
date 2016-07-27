@@ -1,11 +1,11 @@
-# 关于通过H5页面唤NN客户端的介绍
+# 关于通过H5页面唤NNtive户端的介绍
 
-本文档用于介绍通过H5端唤起本地NN客户端的研究过程！
+本文档用于介绍通过H5端唤起本地NN客户端的研究过程！刚进新公司，导师让研究下5页面唤NNtive户端的课题，后面公司客户端产品可能会用到这方面的技术，所以研究了下，写成文章，保密需要，去掉了和具体客户端绑定的内容，希望对那些想了解这方面知识的人有用！
 
 ##背景
 - 目前通过H5页面唤起native App的场景十分常见，比如常见的分享功能；一方面，对于用户而言，相同的内容在native app上比H5体验更好，操作更加方便，另一方面，对于app运营来说，可以增加app的用户粘性度。
 
-- 当前NN客户端内置webview中，比较常用的是通过schema打开NN登陆页，触发分享入口的显示；而在外部浏览器或者webview中唤醒NN客户端目前还没有太多尝试，有据此展开研究的必要性，以便日后在真实的需求中使用！
+- 当前native客户端内置webview中，比较常用的是通过schema打开登陆页、触发分享入口的显示；而在外部浏览器或者webview中唤醒公司的客户端目前还没有太多尝试，有据此展开研究的必要性，以便日后在真实的需求中使用！
 
 
 ## 唤醒native APP 的几种方式
@@ -21,7 +21,6 @@
 
 1. **通过a标签打开**，点击标签是启动
 
-
 		<a href="ftnn:login">打开登录页</a>
 2. **通过iframe打开**，设置iframe.src即会启动
 
@@ -35,7 +34,7 @@ Android上注册schema协议，可以参考博文：[Android手机上实现WebAp
 >注：由于微信的白名单限制，无法通过schema来唤起本地app，只有白名单内的app才能通过微信浏览器唤醒，这个问题我目前没有找到合适的解决办法！
 
 ####Android Intent
-在Android Chrome浏览器中，版本号在chrome 25+的版本不在支持通过传统schema的方法唤醒App，比如通过设置window.location = "futunn://login"将无法唤醒NN客户端。需要通过Android Intent 来唤醒APP；
+在Android Chrome浏览器中，版本号在chrome 25+的版本不在支持通过传统schema的方法唤醒App，比如通过设置window.location = "xxxx://login"将无法唤醒本地客户端。需要通过Android Intent 来唤醒APP；
 使用方式如下：
 
 1. 构件intent字符串：
@@ -44,14 +43,14 @@ Android上注册schema协议，可以参考博文：[Android手机上实现WebAp
 	intent:
 	login											// 特定的schema uri，例如login表示打开NN登陆页
 	#Intent; 
-	  package=cn.futu.trader;     					// NN apk 信息
+	  package=cn.xxxx.xxxxxx;     					// NN apk 信息
 	  action=android.intent.action.VIEW; 			// NN apk 信息
 	  category=android.intent.category.DEFAULT; 	// NN apk 信息
 	  component=[string]; 							// NN apk 信息,可选
-	  scheme=ftnn; 									// 在NN客户端内，schema为futunn，在外部与NN客户端通信时使用ftnn
+	  scheme=xxxx; 									// 协议头
 	  S.browser_fallback_url=[url]					// 可选，schema启动客户端失败时的跳转页，一般为下载页，需编码
 	end; 
-2. 构造一个a标签，将上面schame 字符串作为其href值，当点击a标签时，即为通过schema打开NN 客户端登陆页，如果未安装客户端，则会跳转到指定页，这里会跳转到下载页；
+2. 构造一个a标签，将上面schame 字符串作为其href值，当点击a标签时，即为通过schema打开某客户端登陆页，如果未安装客户端，则会跳转到指定页，这里会跳转到下载页；
 
 		<a href="intent://loin#Intent;scheme=ftnn;package=cn.futu.trader;category=android.intent.category.DEFAULT;action=android.intent.action.VIEW;S.browser_fallback_url=http%3A%2F%2Fa.app.qq.com%2Fo%2Fsimple.jsp%3Fpkgname%3Dcn.futu.trader%26g_f%3D991653;end">打开登录页</a>
 ####Universal links
@@ -67,7 +66,7 @@ Universal links为 iOS 9 上一个所谓 通用链接 的深层链接特性，�
 	> 网易新闻客户端IOS 9上目前采用这种Universal links方式
 
 针对这部分内容可以参考博文： [打通 iOS 9 的通用链接（Universal Links）](http://www.cocoachina.com/ios/20150902/13321.html)
->据我了解，IOS NN客户端目前未实现这种协议，所以无法对这种唤醒方式做测试，日后明确支持此类协议，待测试功能后，再补充这部分详细内容！
+>由于公司IOS客户端目前未实现这种协议，所以无法对这种唤醒方式做测试，日后明确支持此类协议，待测试功能后，再补充这部分详细内容！
 
 ## 实现过程
 
@@ -146,24 +145,44 @@ opera对于iframe.src和a.href的方式都能支持，所以对chrome及先关�
 ## 相关代码
 对代码进行简单的封装，代码如下，在使用时需要针对当前的app做必要设置：
 
-代码见<>
+代码见<./tool-nativeSchema.js> ;采用UMD的写法
 
 调用方式：
 
 ```
+// COMMONJS 的方式引用，不能直接在浏览器中运行，需要打包转换
+var nativeSchema = require("tool-nativeSchema.js");
 
-nnSchema.loadSchema({
-    // 通过NN打开某个链接
-    schema: url,
+// Amd的方式
+require(["tool-nativeSchema.js"],function(nativeSchema){
 
-    //schema头协议，默认为ftnn
-    //protocal:"ftnn",
+});
+
+// 直接引入
+<script type="text/javascript" src="xxxx/tool-nativeSchema.js"></script>
+```
+
+```
+// 使用
+nativeSchema.loadSchema({
+    // 某个schema协议，例如login,
+    schema: "",
+
+    //schema头协议，
+    protocal:"xxx",
 
     //发起唤醒请求后，会等待loadWaiting时间，超时则跳转到failUrl，默认3000ms
-    //loadWaiting:"3000",
+    loadWaiting:"3000",
 
-    //唤起失败时的跳转链接，默认跳转到下载页
-    //failUrl:"http://a.app.qq.com/o/simple.jsp?pkgname=cn.futu.trader&g_f=991653"
+    //唤起失败时的跳转链接，默认跳转到应用商店下载页
+    failUrl:"xxx",
+
+    // Android 客户端信息,可以询问 Android同事
+	apkInfo:{
+        PKG:"",
+        CATEGORY:"",
+        ACTION:""
+	}
 });
 ```
 
@@ -184,6 +203,7 @@ nnSchema.loadSchema({
 
 1. 经过自行测试及网上查阅资料，目前尚未找到完美的解决方案；
 2. 对于文中的不足和错误，欢迎指出。
+3. 转载请说明出处，以方便追本溯源修正文中错误
 
 ## 相关阅读链接
 

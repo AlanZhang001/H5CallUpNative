@@ -2,7 +2,7 @@
 
 本文档用于介绍通过H5端唤起本地NN客户端的研究过程！刚进新公司，导师让研究下5页面唤NNtive户端的课题，后面公司客户端产品可能会用到这方面的技术，所以研究了下，写成文章，保密需要，去掉了和具体客户端绑定的内容，希望对那些想了解这方面知识的人有用！
 
-##背景
+## 背景
 - 目前通过H5页面唤起native App的场景十分常见，比如常见的分享功能；一方面，对于用户而言，相同的内容在native app上比H5体验更好，操作更加方便，另一方面，对于app运营来说，可以增加app的用户粘性度。
 
 - 当前native客户端内置webview中，比较常用的是通过schema打开登陆页、触发分享入口的显示；而在外部浏览器或者webview中唤醒公司的客户端目前还没有太多尝试，有据此展开研究的必要性，以便日后在真实的需求中使用！
@@ -13,7 +13,7 @@
 使用的前提都是客户端程序实现了schema协议。
 
 下面对这３种方式做简要的介绍：
-####Schema
+#### Schema
 
 在Android和IOS浏览器中（非微信浏览器），可以通过schema协议的方式唤醒本地app客户端；schema协议在App注册之后，与前端进行统一约定，通过H5页面访问某个具体的协议地址，即可打开对应的App客户端 页面；
 
@@ -35,16 +35,14 @@ Android上注册schema协议，可以参考博文：[Android手机上实现WebAp
 
 >注：由于微信的白名单限制，无法通过schema来唤起本地app，只有白名单内的app才能通过微信浏览器唤醒，这个问题我目前没有找到合适的解决办法！
 
-####Android Intent
+#### Android Intent
 在Android Chrome浏览器中，版本号在chrome 25+的版本不在支持通过传统schema的方法唤醒App，比如通过设置window.location = "xxxx://login"将无法唤醒本地客户端。需要通过Android Intent 来唤醒APP；
 使用方式如下：
 
 1. 构件intent字符串：
-
-
 	intent:
 	login											// 特定的schema uri，例如login表示打开NN登陆页
-	#Intent; 
+	<em>#</em>Intent; 
 	  package=cn.xxxx.xxxxxx;     					// NN apk 信息
 	  action=android.intent.action.VIEW; 			// NN apk 信息
 	  category=android.intent.category.DEFAULT; 	// NN apk 信息
@@ -55,7 +53,9 @@ Android上注册schema协议，可以参考博文：[Android手机上实现WebAp
 2. 构造一个a标签，将上面schame 字符串作为其href值，当点击a标签时，即为通过schema打开某客户端登陆页，如果未安装客户端，则会跳转到指定页，这里会跳转到下载页；
 
 		<a href="intent://loin#Intent;scheme=ftnn;package=cn.futu.trader;category=android.intent.category.DEFAULT;action=android.intent.action.VIEW;S.browser_fallback_url=http%3A%2F%2Fa.app.qq.com%2Fo%2Fsimple.jsp%3Fpkgname%3Dcn.futu.trader%26g_f%3D991653;end">打开登录页</a>
-####Universal links
+		
+
+#### Universal links
 Universal links为 iOS 9 上一个所谓 通用链接 的深层链接特性，一种能够方便的通过传统 HTTP 链接来启动 APP, 使用相同的网址打开网站和 APP；通过唯一的网址, 就可以链接一个特定的视图到你的 APP 里面, 不需要特别的 schema；
 
 在IOS中，对比schema的方式，Universal links有以下优点：
@@ -67,7 +67,9 @@ Universal links为 iOS 9 上一个所谓 通用链接 的深层链接特性，�
 
 	> 网易新闻客户端IOS 9上目前采用这种Universal links方式
 
-针对这部分内容可以参考博文： [打通 iOS 9 的通用链接（Universal Links）](http://www.cocoachina.com/ios/20150902/13321.html)
+针对这部分内容可以参考博文：
+- [打通 iOS 9 的通用链接（Universal Links）](http://www.cocoachina.com/ios/20150902/13321.html)
+- [浏览器中唤起native app || 跳转到应用商城下载（二） 之universal links](http://gold.xitu.io/entry/57bd1e6179bc440063b3a029/view)
 >由于公司IOS客户端目前未实现这种协议，所以无法对这种唤醒方式做测试，日后明确支持此类协议，待测试功能后，再补充这部分详细内容！
 
 ## 实现过程

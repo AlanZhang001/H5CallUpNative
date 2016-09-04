@@ -40,9 +40,10 @@ Android上注册schema协议，可以参考博文：[Android手机上实现WebAp
 使用方式如下：
 
 1. 构件intent字符串：
+```
 	intent:
 	login											// 特定的schema uri，例如login表示打开NN登陆页
-	<em>#</em>Intent; 
+	#Intent; 
 	  package=cn.xxxx.xxxxxx;     					// NN apk 信息
 	  action=android.intent.action.VIEW; 			// NN apk 信息
 	  category=android.intent.category.DEFAULT; 	// NN apk 信息
@@ -50,6 +51,7 @@ Android上注册schema协议，可以参考博文：[Android手机上实现WebAp
 	  scheme=xxxx; 									// 协议头
 	  S.browser_fallback_url=[url]					// 可选，schema启动客户端失败时的跳转页，一般为下载页，需编码
 	end; 
+```
 2. 构造一个a标签，将上面schame 字符串作为其href值，当点击a标签时，即为通过schema打开某客户端登陆页，如果未安装客户端，则会跳转到指定页，这里会跳转到下载页；
 
 		<a href="intent://loin#Intent;scheme=ftnn;package=cn.futu.trader;category=android.intent.category.DEFAULT;action=android.intent.action.VIEW;S.browser_fallback_url=http%3A%2F%2Fa.app.qq.com%2Fo%2Fsimple.jsp%3Fpkgname%3Dcn.futu.trader%26g_f%3D991653;end">打开登录页</a>

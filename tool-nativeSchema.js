@@ -97,7 +97,7 @@
         generateSchema: function(schema) {
 
             var localUrl  = window.location.href;
-            var schemaStr = "";
+            var schemaStr = schema;
 
             // 如果未定义schema，则根据当前路径来映射
             if (!schema) {

@@ -19,15 +19,15 @@
 
 访问协议地址，目前有3种方式，以打开NN客户端登录页为例：
 
-1. **通过a标签打开**，点击标签是启动
+1.**通过a标签打开**，点击标签是启动
 ```
 	<a href="ftnn:login">打开登录页</a>
 ```
-2. **通过iframe打开**，设置iframe.src即会启动
+2.**通过iframe打开**，设置iframe.src即会启动
 ```
 	<iframe src="ftnn:login"></iframe>
 ```
-3. **直接通过window.location 进行跳转**
+3.**直接通过window.location 进行跳转**
 ```
 	window.location.href= "ftnn:login";
 ```
@@ -39,7 +39,7 @@ Android上注册schema协议，可以参考博文：[Android手机上实现WebAp
 在Android Chrome浏览器中，版本号在chrome 25+的版本不在支持通过传统schema的方法唤醒App，比如通过设置window.location = "xxxx://login"将无法唤醒本地客户端。需要通过Android Intent 来唤醒APP；
 使用方式如下：
 
-1. 构件intent字符串：
+1.构件intent字符串：
 ```
 	intent:
 	login											// 特定的schema uri，例如login表示打开NN登陆页
@@ -52,7 +52,7 @@ Android上注册schema协议，可以参考博文：[Android手机上实现WebAp
 	  S.browser_fallback_url=[url]					// 可选，schema启动客户端失败时的跳转页，一般为下载页，需编码
 	end; 
 ```
-2. 构造一个a标签，将上面schame 字符串作为其href值，当点击a标签时，即为通过schema打开某客户端登陆页，如果未安装客户端，则会跳转到指定页，这里会跳转到下载页；
+2.构造一个a标签，将上面schame 字符串作为其href值，当点击a标签时，即为通过schema打开某客户端登陆页，如果未安装客户端，则会跳转到指定页，这里会跳转到下载页；
 
 		<a href="intent://loin#Intent;scheme=ftnn;package=cn.futu.trader;category=android.intent.category.DEFAULT;action=android.intent.action.VIEW;S.browser_fallback_url=http%3A%2F%2Fa.app.qq.com%2Fo%2Fsimple.jsp%3Fpkgname%3Dcn.futu.trader%26g_f%3D991653;end">打开登录页</a>
 		

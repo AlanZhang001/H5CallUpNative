@@ -97,11 +97,14 @@
         generateSchema: function(schema) {
 
             var localUrl  = window.location.href;
-            var schemaStr = schema;
+            var schemaStr = '';
 
             // 如果未定义schema，则根据当前路径来映射
             if (!schema) {
                 schemaStr = AppConfig.HOME;
+                // 在schema省略时，可以根据当前页面的url，设置不同的默认值
+            } else {
+                schemaStr = schema;
             }
 
             // 如果是安卓chrome浏览器，则通过intent方式打开

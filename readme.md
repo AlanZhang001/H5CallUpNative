@@ -21,15 +21,15 @@
 
 1.**通过a标签打开**，点击标签是启动
 ```
-	<a href="ftnn:login">打开登录页</a>
+<a href="ftnn:login">打开登录页</a>
 ```
 2.**通过iframe打开**，设置iframe.src即会启动
 ```
-	<iframe src="ftnn:login"></iframe>
+<iframe src="ftnn:login"></iframe>
 ```
 3.**直接通过window.location 进行跳转**
 ```
-	window.location.href= "ftnn:login";
+window.location.href= "ftnn:login";
 ```
 Android上注册schema协议，可以参考博文：[Android手机上实现WebApp直接调起NativeApp](https://www.baidufe.com/item/3444ee051f8edb361d12.html)
 
@@ -44,18 +44,18 @@ Android上注册schema协议，可以参考博文：[Android手机上实现WebAp
 	intent:
 	login											// 特定的schema uri，例如login表示打开NN登陆页
 	#Intent; 
-	  package=cn.xxxx.xxxxxx;     					// NN apk 信息
-	  action=android.intent.action.VIEW; 			// NN apk 信息
+	  package=cn.xxxx.xxxxxx;     			// NN apk 信息
+	  action=android.intent.action.VIEW; 		// NN apk 信息
 	  category=android.intent.category.DEFAULT; 	// NN apk 信息
-	  component=[string]; 							// NN apk 信息,可选
-	  scheme=xxxx; 									// 协议头
-	  S.browser_fallback_url=[url]					// 可选，schema启动客户端失败时的跳转页，一般为下载页，需编码
+	  component=[string]; 				// NN apk 信息,可选
+	  scheme=xxxx; 					// 协议头
+	  S.browser_fallback_url=[url]			// 可选，schema启动客户端失败时的跳转页，一般为下载页，需编码
 	end; 
 ```
 2.构造一个a标签，将上面schame 字符串作为其href值，当点击a标签时，即为通过schema打开某客户端登陆页，如果未安装客户端，则会跳转到指定页，这里会跳转到下载页；
-
-		<a href="intent://loin#Intent;scheme=ftnn;package=cn.futu.trader;category=android.intent.category.DEFAULT;action=android.intent.action.VIEW;S.browser_fallback_url=http%3A%2F%2Fa.app.qq.com%2Fo%2Fsimple.jsp%3Fpkgname%3Dcn.futu.trader%26g_f%3D991653;end">打开登录页</a>
-		
+```
+<a href="intent://loin#Intent;scheme=ftnn;package=cn.futu.trader;category=android.intent.category.DEFAULT;action=android.intent.action.VIEW;S.browser_fallback_url=http%3A%2F%2Fa.app.qq.com%2Fo%2Fsimple.jsp%3Fpkgname%3Dcn.futu.trader%26g_f%3D991653;end">打开登录页</a>
+```		
 
 #### Universal links
 Universal links为 iOS 9 上一个所谓 通用链接 的深层链接特性，一种能够方便的通过传统 HTTP 链接来启动 APP, 使用相同的网址打开网站和 APP；通过唯一的网址, 就可以链接一个特定的视图到你的 APP 里面, 不需要特别的 schema；
@@ -67,7 +67,7 @@ Universal links为 iOS 9 上一个所谓 通用链接 的深层链接特性，�
 
 2. Universal link可在再微信浏览器中打开外部App；
 
-	> 网易新闻客户端IOS 9上目前采用这种Universal links方式
+> 网易新闻客户端IOS 9上目前采用这种Universal links方式
 
 针对这部分内容可以参考博文：
 - [打通 iOS 9 的通用链接（Universal Links）](http://www.cocoachina.com/ios/20150902/13321.html)

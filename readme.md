@@ -42,7 +42,7 @@ Android上注册schema协议，可以参考博文：[Android手机上实现WebAp
 1.构件intent字符串：
 ```
 	intent:
-	login											// 特定的schema uri，例如login表示打开NN登陆页
+	login						// 特定的schema uri，例如login表示打开NN登陆页
 	#Intent; 
 	  package=cn.xxxx.xxxxxx;     			// NN apk 信息
 	  action=android.intent.action.VIEW; 		// NN apk 信息

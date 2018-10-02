@@ -1,25 +1,26 @@
 # 关于通过H5页面唤Native户端的介绍
 
-本文档用于介绍通过H5端唤起本地NN客户端的研究过程！刚进新公司，导师让研究下5页面唤NNtive户端的课题，后面公司客户端产品可能会用到这方面的技术，所以研究了下，写成文章，保密需要，去掉了和具体客户端绑定的内容，希望对那些想了解这方面知识的人有用！
+本文档用于介绍通过H5端唤起本地NN客户端的研究过程！
 
-## 背景
+## 1、背景
+
 - 目前通过H5页面唤起native App的场景十分常见，比如常见的分享功能；一方面，对于用户而言，相同的内容在native app上比H5体验更好，操作更加方便，另一方面，对于app运营来说，可以增加app的用户粘性度。
 
-- 当前native客户端内置webview中，比较常用的是通过schema打开登陆页、触发分享入口的显示；而在外部浏览器或者webview中唤醒公司的客户端目前还没有太多尝试，有据此展开研究的必要性，以便日后在真实的需求中使用！
+- 当前native客户端内置webview中，比较常用的是通过schema打开登陆页、配置分享入口的显示；而在外部浏览器或者webview中唤醒公司的客户端目前还没有太多尝试，有据此展开研究的必要性，以便日后在真实的需求中使用！
 
+## 2、唤醒native APP 的几种方式
 
-## 唤醒native APP 的几种方式
-在Android端，常用的方式是Schame + Android Itent，在IOS端，常用的方式是Schema ＋　Universal links（IOS9+）；
-使用的前提都是客户端程序实现了schema协议。
+在Android端，常用的方式是Schame + Android Itent，在IOS端，常用的方式是Schema ＋　Universal links（IOS9+）；使用的前提都是客户端程序实现了Schema协议。
 
 下面对这３种方式做简要的介绍：
-#### Schema
 
-在Android和IOS浏览器中（非微信浏览器），可以通过schema协议的方式唤醒本地app客户端；schema协议在App注册之后，与前端进行统一约定，通过H5页面访问某个具体的协议地址，即可打开对应的App客户端 页面；
+#### 2.1 Schema
 
-访问协议地址，目前有3种方式，以打开NN客户端登录页为例：
+在Android和IOS浏览器中（非微信浏览器），可以通过schema协议的方式唤醒本地app客户端；schema协议在App开发注册之后，与前端进行统一约定，通过H5页面访问某个具体的协议地址，即可打开对应的App客户端 页面；
 
-1.**通过a标签打开**，点击标签是启动
+访问协议地址，目前有3种方式，以打开[富途牛牛](https://play.google.com/store/apps/details?id=cn.futu.trader)客户端登录页为例：
+
+1.**通过a标签打开**，点击标签时启动App
 ```
 <a href="ftnn:login">打开登录页</a>
 ```
@@ -31,61 +32,73 @@
 ```
 window.location.href= "ftnn:login";
 ```
-Android上注册schema协议，可以参考博文：[Android手机上实现WebApp直接调起NativeApp](https://www.baidufe.com/item/3444ee051f8edb361d12.html)
+
+Android上实现注册schema协议，可以参考博文：[Android手机上实现WebApp直接调起NativeApp](https://www.baidufe.com/item/3444ee051f8edb361d12.html)
 
 >注：由于微信的白名单限制，无法通过schema来唤起本地app，只有白名单内的app才能通过微信浏览器唤醒，这个问题我目前没有找到合适的解决办法！
 
-#### Android Intent
-在Android Chrome浏览器中，版本号在chrome 25+的版本不在支持通过传统schema的方法唤醒App，比如通过设置window.location = "xxxx://login"将无法唤醒本地客户端。需要通过Android Intent 来唤醒APP；
+#### 2.2 Android Intent
+
+在Android Chrome浏览器中，版本号在chrome 25+的版本不再支持通过传统schema的方法唤醒App，比如通过设置window.location = "xxxx://login"将无法唤醒本地客户端。需要通过Android Intent 来唤醒APP；
 使用方式如下：
 
 1.构件intent字符串：
+
 ```
 intent:
-login						// 特定的schema uri，例如login表示打开NN登陆页
-#Intent; 
-  package=cn.xxxx.xxxxxx;     			// NN apk 信息
-  action=android.intent.action.VIEW; 		// NN apk 信息
-  category=android.intent.category.DEFAULT; 	// NN apk 信息
-  component=[string]; 				// NN apk 信息,可选
-  scheme=xxxx; 					// 协议头
-  S.browser_fallback_url=[url]			// 可选，schema启动客户端失败时的跳转页，一般为下载页，需编码
-end; 
+login                                                // 特定的schema uri，例如login表示打开NN登陆页
+#Intent;
+    package=cn.xxxx.xxxxxx;                          // 富途牛牛apk信息
+    action=android.intent.action.VIEW;               // 富途牛牛apk信息
+    category=android.intent.category.DEFAULT;        // 富途牛牛apk信息
+    component=[string];                              // 富途牛牛apk信息,可选
+    scheme=xxxx;                                     // 协议类型
+    S.browser_fallback_url=[url]                     //可选，schema启动客户端失败时的跳转页，一般为下载页，需通过encodeURIComponent编码
+end;
 ```
+
 2.构造一个a标签，将上面schame 字符串作为其href值，当点击a标签时，即为通过schema打开某客户端登陆页，如果未安装客户端，则会跳转到指定页，这里会跳转到下载页；
+
 ```
 <a href="intent://loin#Intent;scheme=ftnn;package=cn.futu.trader;category=android.intent.category.DEFAULT;action=android.intent.action.VIEW;S.browser_fallback_url=http%3A%2F%2Fa.app.qq.com%2Fo%2Fsimple.jsp%3Fpkgname%3Dcn.futu.trader%26g_f%3D991653;end">打开登录页</a>
-```		
+```     
 
-#### Universal links
+#### 2.3 Universal links
 Universal links为 iOS 9 上一个所谓 通用链接 的深层链接特性，一种能够方便的通过传统 HTTP 链接来启动 APP, 使用相同的网址打开网站和 APP；通过唯一的网址, 就可以链接一个特定的视图到你的 APP 里面, 不需要特别的 schema；
 
 在IOS中，对比schema的方式，Universal links有以下优点：
 
 1. 通过schema启动app时，浏览器会有弹出确认框提示用户是否打开，而Universal links不会提示，体验更好；
-	
-
 2. Universal link可在再微信浏览器中打开外部App；
 
 > 网易新闻客户端IOS 9上目前采用这种Universal links方式
 
 针对这部分内容可以参考博文：
+
 - [打通 iOS 9 的通用链接（Universal Links）](http://www.cocoachina.com/ios/20150902/13321.html)
 - [浏览器中唤起native app || 跳转到应用商城下载（二） 之universal links](http://gold.xitu.io/entry/57bd1e6179bc440063b3a029/view)
+
 >由于公司IOS客户端目前未实现这种协议，所以无法对这种唤醒方式做测试，日后明确支持此类协议，待测试功能后，再补充这部分详细内容！
 
-## 实现过程
+#### 2.4 微信JS SDK
+
+#### 2.5 QQ JS SDK
+
+## 3、实现过程
 
 首先，通过**浏览器是无法判断是否安装了客户端程序的**，因此整体的思路就是：**尝试去通过上面的唤起方式来唤起本地客户端，如果唤起超时，则直接跳转到下载页**；整个实现过程围绕这一点展开。
 
+>2018年补充：QQ的jssdk目前已经支持判断外部App是否安装
+
 在不考虑IOS9 Universal links唤醒方式的条件下，可以分为这几个步骤；
 
-1. **生成schema字符串**
-	
+#### 1.生成schema字符串
+
 首先判断浏览器UA，如果为Chrome for Android，则必须安装 Android Intent的方式来组织schema字符串；如果为其他浏览器，则按照普通的schema方式来返回即可；
+
 ![](http://i.imgur.com/fVd8LQ5.png)
 
-> 注意参数中包含的url地址需要进行encodeURIComponent编码	
+> 注意参数中包含的url地址需要进行encodeURIComponent编码 
 
 2 .**通过iframe或者a标签来加载schema**
 
@@ -118,11 +131,11 @@ opera对于iframe.src和a.href的方式都能支持，所以对chrome及先关�
 当本地app被唤起，app处于设备可视窗口最上层，则浏览器进入后台程序页面会隐藏掉，会触发pagehide与visibilitychange事件，此时应该清除setimeout事件,于此同时，document.hide属性为true，因此setimeout内也不做跳转动作，防止页面跳转至下载页面；
 此时，有几个事件比较关键：
 
-	pagehide: 页面隐藏时触发
-	
-	visibilitychange： 页面隐藏没有在当前显示时触发，比如切换tab，也会触发该事件
-	
-	document.hidden 当页面隐藏时，该值为true，显示时为false
+    pagehide: 页面隐藏时触发
+    
+    visibilitychange： 页面隐藏没有在当前显示时触发，比如切换tab，也会触发该事件
+    
+    document.hidden 当页面隐藏时，该值为true，显示时为false
 
 为了尽可能的兼容多的浏览器，所以讲这几个事件都进行绑定！
 代码如下。
@@ -184,11 +197,11 @@ nativeSchema.loadSchema({
     failUrl:"xxx",
 
     // Android 客户端信息,可以询问 Android同事
-	apkInfo:{
+    apkInfo:{
         PKG:"",
         CATEGORY:"",
         ACTION:""
-	}
+    }
 });
 ```
 

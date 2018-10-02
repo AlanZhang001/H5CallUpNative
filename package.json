@@ -2,12 +2,13 @@
   "name": "h5callupnative",
   "version": "1.0.0",
   "description": "本文档用于介绍通过H5端唤起本地NN客户端的研究过程！",
-  "main": "tool-nativeSchema.js",
+  "main": "index.js",
   "directories": {
     "example": "examples"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "webpack --progress --watch --config=webpack.config.js",
+    "prod": "webpack --env.prod --config=webpack.config.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,11 @@
   "bugs": {
     "url": "https://github.com/AlanZhang001/H5CallUpNative/issues"
   },
-  "homepage": "https://github.com/AlanZhang001/H5CallUpNative#readme"
+  "homepage": "https://github.com/AlanZhang001/H5CallUpNative#readme",
+  "dependencies": {
+    "eslint": "^5.6.1",
+    "extend": "^3.0.2",
+    "webpack": "^3.1.0",
+    "uglifyjs-webpack-plugin": "^1.0.1"
+  }
 }

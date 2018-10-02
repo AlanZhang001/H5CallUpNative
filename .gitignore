@@ -1,0 +1,8 @@
+.idea
+node_modules
+bower_components
+docs
+wikis
+package-lock.json
+.tmp
+index.js.map

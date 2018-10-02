@@ -1,6 +1,13 @@
 # 关于通过H5页面唤Native户端的介绍
 
-本文档用于介绍通过H5端唤起本地NN客户端的研究过程！
+本文档用于介绍通过H5端唤起本地NN客户端的研究过程！起初是一些研究性质的文章，随着越来越多的人关注和提issue，所以这里做了一些更新。
+
+## 0、change log
+
+#### v2018/10/02
+- 更新readme,规范化代码，可直接使用
+- 更新微信和qq内的处理方式
+- 旧版的文章及代码写于2016年，见[support/v2016](https://github.com/AlanZhang001/H5CallUpNative/tree/support/v2016)
 
 ## 1、背景
 
@@ -21,15 +28,15 @@
 访问协议地址，目前有3种方式，以打开[富途牛牛](https://play.google.com/store/apps/details?id=cn.futu.trader)客户端登录页为例：
 
 1.**通过a标签打开**，点击标签时启动App
-```
+```html
 <a href="ftnn:login">打开登录页</a>
 ```
 2.**通过iframe打开**，设置iframe.src即会启动
-```
+```html
 <iframe src="ftnn:login"></iframe>
 ```
 3.**直接通过window.location 进行跳转**
-```
+```js
 window.location.href= "ftnn:login";
 ```
 
@@ -44,7 +51,7 @@ Android上实现注册schema协议，可以参考博文：[Android手机上实�
 
 1.构件intent字符串：
 
-```
+```html
 intent:
 login                                                // 特定的schema uri，例如login表示打开NN登陆页
 #Intent;
@@ -59,9 +66,9 @@ end;
 
 2.构造一个a标签，将上面schame 字符串作为其href值，当点击a标签时，即为通过schema打开某客户端登陆页，如果未安装客户端，则会跳转到指定页，这里会跳转到下载页；
 
-```
+```html
 <a href="intent://loin#Intent;scheme=ftnn;package=cn.futu.trader;category=android.intent.category.DEFAULT;action=android.intent.action.VIEW;S.browser_fallback_url=http%3A%2F%2Fa.app.qq.com%2Fo%2Fsimple.jsp%3Fpkgname%3Dcn.futu.trader%26g_f%3D991653;end">打开登录页</a>
-```     
+```
 
 #### 2.3 Universal links
 Universal links为 iOS 9 上一个所谓 通用链接 的深层链接特性，一种能够方便的通过传统 HTTP 链接来启动 APP, 使用相同的网址打开网站和 APP；通过唯一的网址, 就可以链接一个特定的视图到你的 APP 里面, 不需要特别的 schema；
@@ -92,15 +99,29 @@ Universal links为 iOS 9 上一个所谓 通用链接 的深层链接特性，�
 
 在不考虑IOS9 Universal links唤醒方式的条件下，可以分为这几个步骤；
 
-#### 1.生成schema字符串
+#### 3.1 生成schema字符串
 
 首先判断浏览器UA，如果为Chrome for Android，则必须安装 Android Intent的方式来组织schema字符串；如果为其他浏览器，则按照普通的schema方式来返回即可；
 
-![](http://i.imgur.com/fVd8LQ5.png)
+```js
+// 如果是安卓chrome浏览器，则通过intent方式打开
+// UC浏览器被识别为chrome，排除之
+if (browser.isChrome() && browser.isAndroid() && browser.isUC() === false) {
+    schemaStr = 'intent://' + schemaStr +'#Intent;'  +
+                'scheme='   + this.appConfig.PROTOCAL          + ';'+
+                'package='  + this.appConfig.APK_INFO.PKG      + ';'+
+                'category=' + this.appConfig.APK_INFO.CATEGORY + ';'+
+                'action='   + this.appConfig.APK_INFO.ACTION   + ';'+
+                'S.browser_fallback_url=' + encodeURIComponent(this.appConfig.FAILBACK.ANDROID) + ';' +
+                'end';
+} else {
+    schemaStr = this.appConfig.PROTOCAL + '://' + schemaStr;
+}
+```
 
-> 注意参数中包含的url地址需要进行encodeURIComponent编码 
+> 注意参数中包含的url地址需要进行encodeURIComponent编码
 
-2 .**通过iframe或者a标签来加载schema**
+#### 3.2 通过iframe或者a标签来加载schema
 
 由于无法确定是否安装了客户端，因此通过window.location =  schema的方式可能导致浏览器跳转到错误页；所以通过iframe.src或a.href载入schema是目前比较常见的方法；
 
@@ -109,99 +130,169 @@ Universal links为 iOS 9 上一个所谓 通用链接 的深层链接特性，�
 经过非全面测试：
 
 - Android系统上，Chrome for Android无法通过iframe.src 来调用schema，而通过a.href 的方式可以成功调用，而针对chrome内核的浏览器如猎豹，360，小米浏览器，
-opera对于iframe.src和a.href的方式都能支持，所以对chrome及先关的内核的浏览器采用a.href的方式来调用scheme；对于其他浏览器，如UC，firefox,mobile QQ，sogou浏览器则采用iframe.src的方式调用schema。对于微信浏览器，则直接跳转到下载页。其他未经测试的浏览器，默认采用iframe.src来调用schema；
-- IOS 9系统上，Safari浏览器无法通过iframe.src的方式调用schema，对于UC，Chrome，百度浏览器，mobileQQ只能通过a.href的方式进行调用schema；对于微信浏览器，默认跳转到下载页；
+opera对于iframe.src和a.href的方式都能支持，所以对chrome及先关的内核的浏览器采用a.href的方式来调用scheme；对于其他浏览器，如firefox,mobile QQ，sogou浏览器则采用iframe.src的方式调用schema。对于微信浏览器，则直接跳转到下载页。其他未经测试的浏览器，默认采用iframe.src来调用schema；
+- IOS 9+系统上，Safari浏览器无法通过iframe.src的方式调用schema，对于UC，Chrome，百度浏览器，mobileQQ只能通过a.href的方式进行调用schema；对于微信浏览器，默认跳转到下载页；
 
 代码如下：
 
-![](http://i.imgur.com/SCGLk2o.png)
+```js
+// 需要开启的schema
+var schemaUrl = this.generateSchema(config.targetURI);
+var body = document.body;
 
-3 .**处理客户端未安装的情况**
+// Android 微信不支持schema唤醒，必须提前加入腾讯的白名单
+// 百度浏览器会拦截schema，所以直接跳下载页
+if (browser.isWx() || browser.isBaidu()) {
+    if (browser.isAndroid()) {
+        window.location.href = this.appConfig.FAILBACK.ANDROID;
+    } else if(browser.isIOS()){
+        window.location.href = this.appConfig.FAILBACK.IOS;
+    }
+// mobile QQ
+} else if(browser.isMobileQQ()){
+    if (browser.isAndroid()) {
+        window.location.href = this.appConfig.FAILBACK.ANDROID;
+    } else if(browser.isIOS()){
+        window.location.href = this.appConfig.FAILBACK.IOS;
+    }
+// Android chrome 不支持iframe 方式唤醒
+// 适用：chrome,leibao,mibrowser,opera,360，qq浏览器
+} else if (browser.isChrome() && browser.isAndroid() || browser.isUC() || browser.isSafari()) {
+    var aLink = util.createALink(schemaUrl);
+    body.appendChild(aLink);
+    aLink.click();
+// 其他浏览器
+// 适用：UC,sogou,firefox
+} else {
+    var iframe = util.createIfr(schemaUrl);
+    body.appendChild(iframe);
+}
+```
+
+#### 3.3 处理客户端未安装的情况
 
 前面提到无法确定客户端程序是否安装，所以在通过iframe和a调用schema时，会设置一个settimeout，超时，则跳转到下载页；
 
->此处的超时时间设置也十分关键，如果超时时间小于app启动时间，则未待app启动，就是执行setimeout的方法，如果超时时间较长，则当客户端程序未安装时，需要较长时间才能执行settimeout方法进入下载页。
+>此处的超时时间设置也十分关键，如果超时时间小于app启动时间，则未待app启动，就是执行setimeout的方法，如果超时时间较长，则当客户端程序未安装时，需要较长时间才能执行settimeout方法进入下载页。因此，此处的延时时间需要考虑APP的启动时间。
 
-![](http://i.imgur.com/5LoUk8D.png)
+```
+var start = new Date().getTime();
+var that = this;
+var loadTimer = setTimeout(function() {
+    if (util.isDocHidden()) {
+        return;
+    }
+    // 如果app启动，浏览器最小化进入后台，则计时器存在推迟或者变慢的问题
+    // 那么代码执行到此处时，时间间隔必然大于设置的定时时间
+    if (Date.now() - start > that.appConfig.LOAD_WAITING + 200) {
+        //console.log('come back from app')
+    // 如果浏览器未因为app启动进入后台，则定时器会准时执行，故应该跳转到下载页
+    } else {
+        if (fail) {
+            fail();
+        } else {
+            window.location.href = browser.isIOS() ? that.appConfig.FAILBACK.IOS : that.appConfig.FAILBACK.ANDROID;
+        }
+    }
+
+}, this.appConfig.LOAD_WAITING);
+```
 
 >代码中，进入到setimeout时，对跳转过程再次进行了限定；当浏览器因为启动app而切换到后台时，settimeout存在计时推迟或延迟的问题，此时，如果从app切换回浏览器端，则执行跳转代码时经历的时间应该大于setimeout所设置的时间；反之，如果本地客户端程序未安装，浏览器则不会进入后台程序，定时器则会准时执行，故应该跳转到下载页！
 
 在实际测试过程，当通过schema成功唤起客户端，再次返回浏览器时，发现页面已跳转至下载页面，因此对已设置的settimeout需要做一个清除处理；
 
 当本地app被唤起，app处于设备可视窗口最上层，则浏览器进入后台程序页面会隐藏掉，会触发pagehide与visibilitychange事件，此时应该清除setimeout事件,于此同时，document.hide属性为true，因此setimeout内也不做跳转动作，防止页面跳转至下载页面；
+
 此时，有几个事件比较关键：
 
-    pagehide: 页面隐藏时触发
-    
-    visibilitychange： 页面隐藏没有在当前显示时触发，比如切换tab，也会触发该事件
-    
-    document.hidden 当页面隐藏时，该值为true，显示时为false
+```html
+pagehide: 页面隐藏时触发
+visibilitychange： 页面隐藏没有在当前显示时触发，比如切换tab，也会触发该事件
+document.hidden 当页面隐藏时，该值为true，显示时为false
+```
 
 为了尽可能的兼容多的浏览器，所以讲这几个事件都进行绑定！
 代码如下。
 
-![](http://i.imgur.com/ZHp2spo.png)
+```
+// 当本地app被唤起，则页面会隐藏掉，就会触发pagehide与visibilitychange事件
+// 在部分浏览器中可行，网上提供方案，作hack处理
+document.addEventListener(util.visibilityChangeName(), function() {
+    if (util.isDocHidden) {
+        clearTimeout(loadTimer);
+    }
+}, false);
+
+// pagehide 必须绑定到window
+window.addEventListener('pagehide', function() {
+    clearTimeout(loadTimer);
+    success && success();
+}, false);
+```
+
 
 ---
 
-## 测试结果
-1. Android平台（小米3 手机测试）
+## 4、测试结果
 
-   - 经测试，可唤起chrome，Firefox，uc，360，mibrowser，sogou，liebao，mobileQQ浏览器；
-   - 新版opera浏览器采用webkit内核，但是当客户端未安装时跳转下载页会会出错，提示页面不存在；
-   - 微信不支持登陆，直接做了跳转到下载页处理；
-   - Android上启动相对比较慢，导致很容易启动超时而跳转到下载页面；
-   - 测试页面在本机，百度浏览器会上报检测url合法性，导致唤醒不成功
+#### 4.1 Android平台（小米3/6 手机测试）
 
-   ![](http://i.imgur.com/917kCq1.png)
+- 经测试，可唤起chrome，Firefox，uc，360，mibrowser，sogou，liebao，mobileQQ浏览器；
+- 新版opera浏览器采用webkit内核，但是当客户端未安装时跳转下载页会会出错，提示页面不存在；
+- 微信不支持登陆，直接做了跳转到下载页处理；
+- Android上启动相对比较慢，导致很容易启动超时而跳转到下载页面；
+- 测试页面在本机，百度浏览器会上报检测url合法性，导致唤醒不成功,故百度浏览器上直接跳转至下载页
 
- 2 . IOS平台（ip4，ip6+，ipad mini2）
-   - os7上Safari可用，其他浏览器为测试，条件限制；
-   - Safari，UC浏览器，Chrome 浏览器能唤起nn客户端，但是Safari会有 是否打开的提示；
-   - QQ webviwe上能打开，偶尔会失败；
-   - IOS上启动速度相对较快
+![](http://i.imgur.com/917kCq1.png)
 
-## 相关代码
+#### 4.2 IOS平台（ip4，ip6+，ipad mini2,ipx）
+
+- os7上Safari可用，其他浏览器为测试，条件限制；
+- Safari，UC浏览器，Chrome 浏览器能唤起nn客户端，但是Safari会有 是否打开的提示；
+- QQ webviwe上能打开，偶尔会失败；
+- IOS上启动速度相对较快
+
+## 5、相关代码
 对代码进行简单的封装，代码如下，在使用时需要针对当前的app做必要设置，采用UMD的写法：
 
-代码见[tool-nativeSchema.js](https://github.com/AlanZhang001/H5CallUpNative/blob/master/tool-nativeSchema.js)
+代码见[index.js](https://github.com/AlanZhang001/H5CallUpNative/blob/master/src/index.js)
 
 调用方式：
 
 ```
-// COMMONJS 的方式引用，不能直接在浏览器中运行，需要打包转换
-var nativeSchema = require("tool-nativeSchema.js");
-
-// Amd的方式
-require(["tool-nativeSchema.js"],function(nativeSchema){
-
-});
+var CallUp = require('index.js');
 
 // 直接引入
-<script type="text/javascript" src="xxxx/tool-nativeSchema.js"></script>
-```
+// <script type="text/javascript" src="xxxx/index.js"></script>
 
-```
-// 使用
-nativeSchema.loadSchema({
-    // 某个schema协议，例如login,
-    schema: "",
+var callup = new Callup({
+    // 协议头
+    PROTOCAL:'ftnn',
 
-    //schema头协议，
-    protocal:"xxx",
+    // 主页
+    HOME: 'quote',
 
-    //发起唤醒请求后，会等待loadWaiting时间，超时则跳转到failUrl，默认3000ms
-    loadWaiting:"3000",
+    // 唤起失败时的跳转链接
+    FAILBACK: {
+        ANDROID: 'http://a.app.qq.com/o/simple.jsp?pkgname=cn.futu.trader&g_f=991653',
+        IOS:'http://a.app.qq.com/o/simple.jsp?pkgname=cn.futu.trader&g_f=991653'
+    },
 
-    //唤起失败时的跳转链接，默认跳转到应用商店下载页
-    failUrl:"xxx",
+    // Android apk 相关信息
+    APK_INFO: {
+        PKG: 'cn.futu.trader',
+        CATEGORY: 'android.intent.category.DEFAULT',
+        ACTION: 'android.intent.action.VIEW'
+    },
 
-    // Android 客户端信息,可以询问 Android同事
-    apkInfo:{
-        PKG:"",
-        CATEGORY:"",
-        ACTION:""
-    }
+    // 唤起超时时间，超时则跳转到下载页面
+    LOAD_WAITING: 3000
+});
+
+callup.loadSchema({
+    // 通过NN打开某个链接
+    targetURI: 'ftnn://quote'
 });
 ```
 

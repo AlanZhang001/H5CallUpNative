@@ -43,9 +43,9 @@
             </a>
         </div>
     </body>
-    <script type="text/javascript" src="../index.js"></script>
+    <script type="text/javascript" src="../index.js?999"></script>
     <script type="text/javascript">
-
+        /*globals Callup*/
         var callup = new Callup({
             // 协议头
             PROTOCAL:'ftnn',
@@ -72,7 +72,7 @@
 
         document.querySelector("#openNN").addEventListener("click",function(){
 
-            var url = "url/" + encodeURIComponent('https://www.act.futunn.com');
+            var url = "url/" + encodeURIComponent('https://act.futunn.com');
 
             callup.loadSchema({
                 // 通过NN打开某个链接

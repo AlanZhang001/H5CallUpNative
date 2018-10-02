@@ -1,4 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["Callup"] = factory();
+	else
+		root["Callup"] = factory();
+})(typeof self !== 'undefined' ? self : this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -189,23 +199,24 @@ extend(Callup.prototype,{
 
         // 如果未定义schema，则根据当前路径来映射
         if (!schemaURI) {
-            schemaStr = defautlConfig.HOME;
+            schemaStr = this.appConfig.HOME;
             // 在schema省略时，可以根据当前页面的url，设置不同的默认值
         } else {
             schemaStr = schemaURI;
         }
 
         // 如果是安卓chrome浏览器，则通过intent方式打开
-        if (browser.isChrome() && browser.isAndroid()) {
+        // UC浏览器被识别为chrome，排除之
+        if (browser.isChrome() && browser.isAndroid() && browser.isUC() === false) {
             schemaStr = 'intent://' + schemaStr +'#Intent;'  +
-                        'scheme='   + defautlConfig.PROTOCAL          + ';'+
-                        'package='  + defautlConfig.APK_INFO.PKG      + ';'+
-                        'category=' + defautlConfig.APK_INFO.CATEGORY + ';'+
-                        'action='   + defautlConfig.APK_INFO.ACTION   + ';'+
-                        'S.browser_fallback_url=' + encodeURIComponent(defautlConfig.FAILBACK.ANDROID) + ';' +
+                        'scheme='   + this.appConfig.PROTOCAL          + ';'+
+                        'package='  + this.appConfig.APK_INFO.PKG      + ';'+
+                        'category=' + this.appConfig.APK_INFO.CATEGORY + ';'+
+                        'action='   + this.appConfig.APK_INFO.ACTION   + ';'+
+                        'S.browser_fallback_url=' + encodeURIComponent(this.appConfig.FAILBACK.ANDROID) + ';' +
                         'end';
         } else {
-            schemaStr = defautlConfig.PROTOCAL + '://' + schemaStr;
+            schemaStr = this.appConfig.PROTOCAL + '://' + schemaStr;
         }
 
         return schemaStr;
@@ -214,26 +225,27 @@ extend(Callup.prototype,{
     loadSchema: function(config){
 
         // 需要开启的schema
-        var schemaUrl = this.generateSchema(defautlConfig.targetURI);
+        var schemaUrl = this.generateSchema(config.targetURI);
         var body = document.body;
 
         // Android 微信不支持schema唤醒，必须提前加入腾讯的白名单
-        if (browser.isWx()) {
+        // 百度浏览器会拦截schema，所以直接跳下载页
+        if (browser.isWx() || browser.isBaidu()) {
             if (browser.isAndroid()) {
-                window.location.href = defautlConfig.FAILBACK.ANDROID;
+                window.location.href = this.appConfig.FAILBACK.ANDROID;
             } else if(browser.isIOS()){
-                window.location.href = defautlConfig.FAILBACK.IOS;
+                window.location.href = this.appConfig.FAILBACK.IOS;
             }
         // mobile QQ
         } else if(browser.isMobileQQ()){
             if (browser.isAndroid()) {
-                window.location.href = defautlConfig.FAILBACK.ANDROID;
+                window.location.href = this.appConfig.FAILBACK.ANDROID;
             } else if(browser.isIOS()){
-                window.location.href = defautlConfig.FAILBACK.IOS;
+                window.location.href = this.appConfig.FAILBACK.IOS;
             }
         // Android chrome 不支持iframe 方式唤醒
-        // 适用：chrome,leibao,mibrowser,opera,360
-        } else if (browser.isChrome() && browser.isAndroid()) {
+        // 适用：chrome,leibao,mibrowser,opera,360，qq浏览器
+        } else if (browser.isChrome() && browser.isAndroid() || browser.isUC() || browser.isSafari()) {
             var aLink = util.createALink(schemaUrl);
             body.appendChild(aLink);
             aLink.click();
@@ -255,7 +267,7 @@ extend(Callup.prototype,{
      */
     checkLoadStatus: function(success,fail){
         var start = new Date().getTime();
-
+        var that = this;
         var loadTimer = setTimeout(function() {
             if (util.isDocHidden()) {
                 return;
@@ -263,18 +275,18 @@ extend(Callup.prototype,{
 
             // 如果app启动，浏览器最小化进入后台，则计时器存在推迟或者变慢的问题
             // 那么代码执行到此处时，时间间隔必然大于设置的定时时间
-            if (Date.now() - start > defautlConfig.LOAD_WAITING + 200) {
+            if (Date.now() - start > that.appConfig.LOAD_WAITING + 200) {
                 //console.log('come back from app')
             // 如果浏览器未因为app启动进入后台，则定时器会准时执行，故应该跳转到下载页
             } else {
                 if (fail) {
                     fail();
                 } else {
-                    window.location.href = browser.isIOS() ? defautlConfig.FAILBACK.IOS : defautlConfig.FAILBACK.ANDROID;
+                    window.location.href = browser.isIOS() ? that.appConfig.FAILBACK.IOS : that.appConfig.FAILBACK.ANDROID;
                 }
             }
 
-        }, defautlConfig.LOAD_WAITING);
+        }, this.appConfig.LOAD_WAITING);
 
 
         // 当本地app被唤起，则页面会隐藏掉，就会触发pagehide与visibilitychange事件
@@ -457,7 +469,16 @@ var browser = {
         return navigator.userAgent.match(/micromessenger/i) ? true : false;
     },
     isChrome: function(){
-
+        return (navigator.userAgent.match(/Chrome\/([\d.]+)/) || navigator.userAgent.match(/CriOS\/([\d.]+)/)) ? true : false;
+    },
+    isBaidu: function(){
+        return navigator.userAgent.match(/baidubrowser/i) ? true : false;
+    },
+    isUC: function(){
+        return navigator.userAgent.match(/UCBrowser/i) ? true : false;
+    },
+    isSafari: function(){
+        return navigator.userAgent.match(/safari/i) ? true : false;
     }
 };
 
@@ -466,4 +487,5 @@ module.exports = browser;
 
 /***/ })
 /******/ ]);
+});
 //# sourceMappingURL=index.js.map

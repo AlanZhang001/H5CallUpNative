@@ -19,7 +19,16 @@ var browser = {
         return navigator.userAgent.match(/micromessenger/i) ? true : false;
     },
     isChrome: function(){
-
+        return (navigator.userAgent.match(/Chrome\/([\d.]+)/) || navigator.userAgent.match(/CriOS\/([\d.]+)/)) ? true : false;
+    },
+    isBaidu: function(){
+        return navigator.userAgent.match(/baidubrowser/i) ? true : false;
+    },
+    isUC: function(){
+        return navigator.userAgent.match(/UCBrowser/i) ? true : false;
+    },
+    isSafari: function(){
+        return navigator.userAgent.match(/safari/i) ? true : false;
     }
 };
 

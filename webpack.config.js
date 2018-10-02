@@ -28,7 +28,9 @@ module.exports = env => {
         output: {
             path: path.resolve(__dirname, './'),
             filename: '[name].js',
-            pathinfo: isProdEnv ? false : true
+            pathinfo: isProdEnv ? false : true,
+            libraryTarget: 'umd',
+            library: 'Callup'
         }
     }
 };

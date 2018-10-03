@@ -93,9 +93,31 @@ Universal links为 iOS 9 上一个所谓 通用链接 的深层链接特性，�
 
 目前富途牛牛已经接入该功能，接入方会收到对应的接口文档，按照文档进行接入接口，不确定是否涉及到需要保密的内容，故不作公开此处做法。如需接入，先联系微信相关部门。
 
+微信中，比较常用的做法是：
+
+1. 直接提示去下载页面
+2. 提示在外部浏览器中打开，在外部浏览器中通过schame等方式打开APP
+
 #### 2.5 QQ JS SDK
 
 和微信同属腾讯，qq确对外开放了唤起APP的相关接口权限。
+
+- 检测外部app是否安装,见[isAppInstalled](http://open.mobile.qq.com/api/common/index#api:isAppInstalled)
+
+![](https://cloudmain.futunn.com/test/business-qq/isinstalled.png?_=1538550953571)
+
+- 启动外部app,见[launch](http://open.mobile.qq.com/api/common/index#api:launchApp)
+
+![](https://cloudmain.futunn.com/test/business-qq/open.png?_=1538550953571)
+
+本来，心里想的很美的，使用QQ提供的api来打开APP,效果应该更好；想法是这样的：
+
+1. 使用isAppInstalled判断APP是否安装，如果已安装，则调用launchApp打开APP
+2. 如果没有判断没有安装外部APP，则可调整至下载页
+
+于是，写了个demo来测试，但是。。。。调用isAppInstalled，api给出的提示是“permission denied”，直接调用launchApp方法也不可行，网上找了很久也有相关说明，QQ的api平台也没有反馈入口，。。。只好放弃这种方式；**猜想只有 腾讯认可的域名中才能调用相关API。**
+
+**QQ webview本身也能通过schema的方式唤起APP,所以还是老实使用这种方式。**
 
 ## 3、实现过程
 
@@ -252,7 +274,7 @@ window.addEventListener('pagehide', function() {
 
 ![](http://i.imgur.com/917kCq1.png)
 
-#### 4.2 IOS平台（ip4，ip6+，ipad mini2,ipx）
+#### 4.2 IOS平台（ipx）
 
 - os7上Safari可用，其他浏览器为测试，条件限制；
 - Safari，UC浏览器，Chrome 浏览器能唤起nn客户端，但是Safari会有 是否打开的提示；
@@ -263,6 +285,12 @@ window.addEventListener('pagehide', function() {
 对代码进行简单的封装，代码如下，在使用时需要针对当前的app做必要设置，采用UMD的写法：
 
 代码见[index.js](https://github.com/AlanZhang001/H5CallUpNative/blob/master/src/index.js)
+
+安装方式：
+
+```
+npm install --save
+```
 
 调用方式：
 
@@ -302,6 +330,23 @@ callup.loadSchema({
 });
 ```
 
+代码测试结果:
+
+|平台|Android|iOS|
+|:--:|:--:|:--:|
+|chrome|✔️|✔️|
+|mi browser|✔️|-|
+|uc|✔️||
+|qq browser|||
+|360 browser|||
+|猎豹|||
+|sogou|||
+|baidu browser|X||
+|firefox|✔️||
+|safari|-||
+|微博 |||
+|支付宝|||
+
 ## 6、研究意义
 **便于通过相关H5页面进入Native客户端，提升用户体验，提升App用户粘度；** 对于未安装客户端的用户，可引导进入下载通道，如下场景图：
 
@@ -314,6 +359,10 @@ callup.loadSchema({
 3. 尚未对IOS9的 Universal links协议进行功能测试。
 4. 代码中使用的各种时间如：settimeout定时时间均根据本机测试进行的调整，普遍性需要进一步验证
 
+## 还没解决的问题
+
+1. 在询问是否打开APP的时候，如果选择了“取消”，则再唤起APP的时候会不起作用。目前并没有什么解决方案，在chrome Android,UC Android上会复现问题。需再次刷新页面才行。
+
 ## 最后
 
 1. 经过自行测试及网上查阅资料，目前尚未找到完美的解决方案；
@@ -325,5 +374,5 @@ callup.loadSchema({
 - <https://developer.chrome.com/multidevice/android/intents>
 - <https://segmentfault.com/a/1190000005848133?_ea=938555>
 - <http://www.w3ctech.com/topic/287?utm_source=tuicool&utm_medium=referral>
-- <http://blog.html5funny.com/2015/06/19/open-app-from-mobile-web-browser-or-webview/>
 - <http://echozq.github.io/echo-blog/2015/11/13/callapp.html>
+

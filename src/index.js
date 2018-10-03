@@ -107,7 +107,7 @@ extend(Callup.prototype,{
     /**
      * [generateSchema 根据不同的场景及UA生成最终应用的schema]
      * @param {schema} [schemaURI]    [需要使用的schema字符串，如果login，会和协议组装成app可识别的协议]
-     * @return {Sring}                [description]
+     * @return {Sring}                [可用的schema]
      */
     generateSchema: function(schemaURI) {
 
@@ -138,6 +138,11 @@ extend(Callup.prototype,{
         return schemaStr;
     },
 
+    /**
+     * [loadSchema 加载schema，打开app]
+     * @param  {Object} config [打开时的配置]
+     * @return {undefined}
+     */
     loadSchema: function(config){
 
         // 需要开启的schema
@@ -152,21 +157,14 @@ extend(Callup.prototype,{
             } else if(browser.isIOS()){
                 window.location.href = this.appConfig.FAILBACK.IOS;
             }
-        // mobile QQ
-        } else if(browser.isMobileQQ()){
-            if (browser.isAndroid()) {
-                window.location.href = this.appConfig.FAILBACK.ANDROID;
-            } else if(browser.isIOS()){
-                window.location.href = this.appConfig.FAILBACK.IOS;
-            }
         // Android chrome 不支持iframe 方式唤醒
-        // 适用：chrome,leibao,mibrowser,opera,360，qq浏览器
+        // 适用：chrome,leibao,mibrowser,opera,360，UC,qq浏览器
         } else if (browser.isChrome() && browser.isAndroid() || browser.isUC() || browser.isSafari()) {
             var aLink = util.createALink(schemaUrl);
             body.appendChild(aLink);
             aLink.click();
         // 其他浏览器
-        // 适用：UC,sogou,firefox
+        // 适用：sogou,firefox,mobileQQ
         } else {
             var iframe = util.createIfr(schemaUrl);
             body.appendChild(iframe);

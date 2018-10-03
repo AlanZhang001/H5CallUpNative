@@ -1,6 +1,6 @@
 {
-  "name": "h5callupnative",
-  "version": "0.0.1",
+  "name": "tool-callapp",
+  "version": "1.0.1",
   "description": "本文档用于介绍通过H5端唤起本地NN客户端的研究过程！",
   "main": "index.js",
   "directories": {

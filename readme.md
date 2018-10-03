@@ -2,10 +2,15 @@
 
 本文档用于介绍通过H5端唤起本地富途牛牛客户端的研究过程！起初是一些研究性质的文章，随着越来越多的人关注和提issue，所以这里做了一些更新。
 
-## 0、change log
+**快速使用见 5、相关代码**
 
-#### v2018/10/02
-- 更新readme,规范化代码，可直接使用
+## change log
+
+#### 2018/10/03
+- 发布tool-callapp@1.0.1，修复readme
+
+#### 2018/10/02
+- 更新readme,规范化代码，可直接使用，已发布至npm，见[tool-callapp@1.0.0](https://www.npmjs.com/package/tool-callapp)
 - 更新微信和qq内的处理方式
 - 旧版的文章及代码写于2016年，见[support/v2016](https://github.com/AlanZhang001/H5CallUpNative/tree/support/v2016)
 
@@ -290,16 +295,16 @@ window.addEventListener('pagehide', function() {
 安装方式：
 
 ```
-npm install --save
+npm install tool-callapp --save
 ```
 
 调用方式：
 
 ```
-var CallUp = require('index.js');
+var CallUp = require('tool-callapp');
 
 // 直接引入
-// <script type="text/javascript" src="xxxx/index.js"></script>
+// <script type="text/javascript" src="/yourpath/tool-callapp/index.js"></script>
 
 var callup = new Callup({
     // 协议头

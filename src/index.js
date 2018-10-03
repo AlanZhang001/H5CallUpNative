@@ -123,7 +123,7 @@ extend(Callup.prototype,{
 
         // 如果是安卓chrome浏览器，则通过intent方式打开
         // UC浏览器被识别为chrome，排除之
-        if (browser.isChrome() && browser.isAndroid() && browser.isUC() === false) {
+        if (browser.isChrome() && browser.isAndroid() && browser.isUC() === false && browser.isQQBrowser() === false) {
             schemaStr = 'intent://' + schemaStr +'#Intent;'  +
                         'scheme='   + this.appConfig.PROTOCAL          + ';'+
                         'package='  + this.appConfig.APK_INFO.PKG      + ';'+
@@ -159,7 +159,7 @@ extend(Callup.prototype,{
             }
         // Android chrome 不支持iframe 方式唤醒
         // 适用：chrome,leibao,mibrowser,opera,360，UC,qq浏览器
-        } else if (browser.isChrome() && browser.isAndroid() || browser.isUC() || browser.isSafari()) {
+        } else if (browser.isChrome() && browser.isAndroid() || browser.isUC() || browser.isSafari() || browser.isQQBrowser()) {
             var aLink = util.createALink(schemaUrl);
             body.appendChild(aLink);
             aLink.click();

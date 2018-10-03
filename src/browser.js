@@ -29,6 +29,9 @@ var browser = {
     },
     isSafari: function(){
         return navigator.userAgent.match(/safari/i) ? true : false;
+    },
+    isQQBrowser: function(){
+        return navigator.userAgent.match(/MQQBrowser/i) ? true : false;
     }
 };
 

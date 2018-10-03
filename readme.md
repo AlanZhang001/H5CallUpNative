@@ -344,7 +344,7 @@ callup.loadSchema({
 |qq|✔️|X|
 |chrome|✔️|✔️|
 |mi browser|✔️|-|
-|uc|✔️||
+|uc|✔️|✔️|
 |qq browser|✔️|✔️|
 |360 browser|✔️|✔️|
 |猎豹|✔️|✔️|

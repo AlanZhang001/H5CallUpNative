@@ -151,7 +151,11 @@ extend(Callup.prototype,{
 
         // Android 微信不支持schema唤醒，必须提前加入腾讯的白名单
         // 百度浏览器会拦截schema，所以直接跳下载页
-        if (browser.isWx() || browser.isBaidu()) {
+        // QQ,weobo 内也直接跳转下载页
+        if (browser.isWx() || browser.isBaidu()
+            || (browser.isIOS() && browser.isMobileQQ())
+            || (browser.isIOS() && browser.isAlipay())
+            || browser.isWeibo()) {
             if (browser.isAndroid()) {
                 window.location.href = this.appConfig.FAILBACK.ANDROID;
             } else if(browser.isIOS()){
@@ -159,7 +163,10 @@ extend(Callup.prototype,{
             }
         // Android chrome 不支持iframe 方式唤醒
         // 适用：chrome,leibao,mibrowser,opera,360，UC,qq浏览器
-        } else if (browser.isChrome() && browser.isAndroid() || browser.isUC() || browser.isSafari() || browser.isQQBrowser()) {
+        } else if (browser.isChrome() && browser.isAndroid()
+            || browser.isUC()
+            || browser.isSafari()
+            || browser.isQQBrowser()) {
             var aLink = util.createALink(schemaUrl);
             body.appendChild(aLink);
             aLink.click();

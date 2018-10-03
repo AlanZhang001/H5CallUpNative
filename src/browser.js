@@ -32,6 +32,12 @@ var browser = {
     },
     isQQBrowser: function(){
         return navigator.userAgent.match(/MQQBrowser/i) ? true : false;
+    },
+    isWeibo: function(){
+        return navigator.userAgent.match(/weibo/i) ? true : false;
+    },
+    isAlipay: function(){
+        return navigator.userAgent.match(/Alipay/i) ? true : false;
     }
 };
 

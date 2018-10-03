@@ -278,8 +278,9 @@ window.addEventListener('pagehide', function() {
 
 - os7上Safari可用，其他浏览器为测试，条件限制；
 - Safari，UC浏览器，Chrome 浏览器能唤起nn客户端，但是Safari会有 是否打开的提示；
-- QQ webviwe上能打开，偶尔会失败；
+- QQ webviwe上能打开，偶尔会失败；2016年的时候测过还可以，现在不可以打开了；
 - IOS上启动速度相对较快
+- IOS上，在不能唤起APP的情况下，跳转至APP Store的下载链接可通过APP store间接唤起APP
 
 ## 5、相关代码
 对代码进行简单的封装，代码如下，在使用时需要针对当前的app做必要设置，采用UMD的写法：
@@ -334,18 +335,27 @@ callup.loadSchema({
 
 |平台|Android|iOS|
 |:--:|:--:|:--:|
+|weixin|X|X|
+|qq|✔️|X|
 |chrome|✔️|✔️|
 |mi browser|✔️|-|
 |uc|✔️||
-|qq browser|||
-|360 browser|||
-|猎豹|||
-|sogou|||
-|baidu browser|X||
-|firefox|✔️||
-|safari|-||
-|微博 |||
-|支付宝|||
+|qq browser|✔️|✔️|
+|360 browser|✔️|✔️|
+|猎豹|✔️|✔️|
+|sogou|✔️|✔️|
+|baidu browser|X|X|
+|firefox|✔️|✔️|
+|safari|-|✔️|
+|微博国际|X|X|
+|微博|X|X|
+|支付宝|✔️|X|
+
+>✔️表示能唤起APP，X表示不能，-表示品台上没有该浏览器
+
+- android支护宝中唤起时，会先跳转至支付宝提供的中间页，提示会进行跳转。点击"点击跳转"之后能唤起APP
+
+<img src="https://cloudmain.futunn.com/test/H5CallUpNative/images/WechatIMG7-c3f1e6630de9197f1e08a5f9f9204cc7.png?_=1538561195372" style="width: 40%;" />
 
 ## 6、研究意义
 **便于通过相关H5页面进入Native客户端，提升用户体验，提升App用户粘度；** 对于未安装客户端的用户，可引导进入下载通道，如下场景图：

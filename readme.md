@@ -138,8 +138,8 @@ Universal links为 iOS 9 上一个所谓 通用链接 的深层链接特性，�
 
 ```js
 // 如果是安卓chrome浏览器，则通过intent方式打开
-// UC浏览器被识别为chrome，排除之
-if (browser.isChrome() && browser.isAndroid() && browser.isUC() === false) {
+// UC/QQ浏览器被识别为chrome，排除之
+if (browser.isChrome() && browser.isAndroid() && browser.isUC() === false && browser.isQQBrowser() === false) {
     schemaStr = 'intent://' + schemaStr +'#Intent;'  +
                 'scheme='   + this.appConfig.PROTOCAL          + ';'+
                 'package='  + this.appConfig.APK_INFO.PKG      + ';'+
@@ -169,33 +169,33 @@ opera对于iframe.src和a.href的方式都能支持，所以对chrome及先关�
 代码如下：
 
 ```js
-// 需要开启的schema
+// 需要使用的schema
 var schemaUrl = this.generateSchema(config.targetURI);
 var body = document.body;
 
 // Android 微信不支持schema唤醒，必须提前加入腾讯的白名单
 // 百度浏览器会拦截schema，所以直接跳下载页
-if (browser.isWx() || browser.isBaidu()) {
-    if (browser.isAndroid()) {
-        window.location.href = this.appConfig.FAILBACK.ANDROID;
-    } else if(browser.isIOS()){
-        window.location.href = this.appConfig.FAILBACK.IOS;
-    }
-// mobile QQ
-} else if(browser.isMobileQQ()){
+// QQ,weobo 内也直接跳转下载页
+if (browser.isWx() || browser.isBaidu()
+    || (browser.isIOS() && browser.isMobileQQ())
+    || (browser.isIOS() && browser.isAlipay())
+    || browser.isWeibo()) {
     if (browser.isAndroid()) {
         window.location.href = this.appConfig.FAILBACK.ANDROID;
     } else if(browser.isIOS()){
         window.location.href = this.appConfig.FAILBACK.IOS;
     }
 // Android chrome 不支持iframe 方式唤醒
-// 适用：chrome,leibao,mibrowser,opera,360，qq浏览器
-} else if (browser.isChrome() && browser.isAndroid() || browser.isUC() || browser.isSafari()) {
+// 适用：chrome,leibao,mibrowser,opera,360，UC,qq浏览器
+} else if (browser.isChrome() && browser.isAndroid()
+    || browser.isUC()
+    || browser.isSafari()
+    || browser.isQQBrowser()) {
     var aLink = util.createALink(schemaUrl);
     body.appendChild(aLink);
     aLink.click();
 // 其他浏览器
-// 适用：UC,sogou,firefox
+// 适用：sogou,firefox,mobileQQ
 } else {
     var iframe = util.createIfr(schemaUrl);
     body.appendChild(iframe);
@@ -260,7 +260,7 @@ document.addEventListener(util.visibilityChangeName(), function() {
 // pagehide 必须绑定到window
 window.addEventListener('pagehide', function() {
     clearTimeout(loadTimer);
-    success && success();
+    //success && success();
 }, false);
 ```
 
@@ -331,10 +331,13 @@ var callup = new Callup({
 });
 
 callup.loadSchema({
-    // 通过NN打开某个链接
-    targetURI: 'ftnn://quote'
+    // 通过NN打开某个链接,注意不包括协议部分，比如打开行情主页的完整schema是ftnn://quote,这里传的值只有uri部分，即quote
+    targetURI: 'quote'
 });
+
 ```
+
+>本来这里提供了success和fail的回调，但是还未做完整测试，故暂时不开放
 
 代码测试结果:
 

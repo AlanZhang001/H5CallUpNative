@@ -122,7 +122,7 @@ extend(Callup.prototype,{
         }
 
         // 如果是安卓chrome浏览器，则通过intent方式打开
-        // UC浏览器被识别为chrome，排除之
+        // UC/QQ浏览器被识别为chrome，排除之
         if (browser.isChrome() && browser.isAndroid() && browser.isUC() === false && browser.isQQBrowser() === false) {
             schemaStr = 'intent://' + schemaStr +'#Intent;'  +
                         'scheme='   + this.appConfig.PROTOCAL          + ';'+
@@ -145,7 +145,7 @@ extend(Callup.prototype,{
      */
     loadSchema: function(config){
 
-        // 需要开启的schema
+        // 需要使用的schema
         var schemaUrl = this.generateSchema(config.targetURI);
         var body = document.body;
 

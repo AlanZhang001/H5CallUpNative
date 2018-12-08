@@ -6,6 +6,9 @@
 
 ## change log
 
+#### 2018/12/08
+- readme 关于chrome25的启动方式说明做了修正，建议来自来自[VIGDXX](https://github.com/VIGDXX)
+
 #### 2018/10/03
 - 发布tool-callapp@1.0.1，修复readme
 
@@ -51,9 +54,10 @@ Android上实现注册schema协议，可以参考博文：[Android手机上实�
 
 #### 2.2 Android Intent
 
-在Android Chrome浏览器中，版本号在chrome 25+的版本不再支持通过传统schema的方法唤醒APP，比如通过设置window.location = "xxxx://login"将无法唤醒本地客户端。
+<del>在Android Chrome浏览器中，版本号在chrome 25+的版本不再支持通过传统schema的方法唤醒APP，比如通过设置window.location = "xxxx://login"将无法唤醒本地客户端。需要通过Android Intent 来唤醒APP；</del>
 
-在Android Chrome浏览器中，版本号在chrome 25+的版本中，需要构建Android Intent ，通过用户手势，如点击来唤起 app [官方文档](https://developer.chrome.com/multidevice/android/intents)
+在Android Chrome浏览器中，版本号在chrome 25+的版本不再支持通过传统schema的方法唤醒APP，比如通过设置window.location = "xxxx://login"将无法唤醒本地客户端，传统方式需要通过设置用户手势，比如点击来唤起APP，或者，直接通过构造Android Intent 的方式来唤醒APP；
+[官方文档](https://developer.chrome.com/multidevice/android/intents)
 > you should implement a user gesture to launch the app via a custom scheme, or use the “intent:” syntax described in this article.
 
 使用方式如下：

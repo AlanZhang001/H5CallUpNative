@@ -1,6 +1,6 @@
 {
   "name": "tool-callapp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "本文档用于介绍通过H5端唤起本地NN客户端的研究过程！",
   "main": "index.js",
   "directories": {
@@ -26,8 +26,10 @@
   },
   "homepage": "https://github.com/AlanZhang001/H5CallUpNative#readme",
   "dependencies": {
+    "extend": "^3.0.2"
+  },
+  "devDependencies": {
     "eslint": "^5.6.1",
-    "extend": "^3.0.2",
     "webpack": "^3.1.0",
     "uglifyjs-webpack-plugin": "^1.0.1"
   }

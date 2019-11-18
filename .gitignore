@@ -6,3 +6,4 @@ wikis
 package-lock.json
 .tmp
 index.js.map
+.history

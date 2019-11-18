@@ -6,6 +6,9 @@
 
 ## change log
 
+#### 2019/11/18 
+- 发布tool-callapp@1.0.2,调整package.json中 webpack等开发依赖组件的位置，减少冗余安装。建议来自[CaiDi](https://github.com/littleVege)
+
 #### 2018/12/08
 - readme 关于chrome25的启动方式说明做了修正，建议来自来自[VIGDXX](https://github.com/VIGDXX)
 

@@ -69,7 +69,7 @@ Android上实现注册schema协议，可以参考博文：[Android手机上实�
 
 ```html
 intent:
-login                                                // 特定的schema uri，例如login表示打开NN登陆页
+login                                                // 特定的schema uri，例如login表示打开app 原生登陆页
 #Intent;
     package=cn.xxxx.xxxxxx;                          // apk信息
     action=android.intent.action.VIEW;               // apk信息

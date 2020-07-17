@@ -120,11 +120,11 @@ Universal links为 iOS 9 上一个所谓 通用链接 的深层链接特性，�
 
 - 检测外部app是否安装,见[isAppInstalled](http://open.mobile.qq.com/api/common/index#api:isAppInstalled)
 
-![](https://cloudmain.futunn.com/test/business-qq/isinstalled.png?_=1538550953571)
+![](./asserts/isinstalled.png)
 
 - 启动外部app,见[launch](http://open.mobile.qq.com/api/common/index#api:launchApp)
 
-![](https://cloudmain.futunn.com/test/business-qq/open.png?_=1538550953571)
+![](./asserts/open.png)
 
 本来，心里想的很美的，使用QQ提供的api来打开APP,效果应该更好；想法是这样的：
 
@@ -288,7 +288,7 @@ window.addEventListener('pagehide', function() {
 - Android上启动相对比较慢，导致很容易启动超时而跳转到下载页面；
 - 测试页面在本机，百度浏览器会上报检测url合法性，导致唤醒不成功,故百度浏览器上直接跳转至下载页
 
-![](http://i.imgur.com/917kCq1.png)
+![](./asserts/http.png)
 
 #### 4.2 IOS平台（ipx）
 
@@ -372,14 +372,14 @@ callup.loadSchema({
 
 >✔️表示能唤起APP，X表示不能，-表示品台上没有该浏览器
 
-- android支护宝中唤起时，会先跳转至支付宝提供的中间页，提示会进行跳转。点击"点击跳转"之后能唤起APP
+- android支付宝中唤起时，会先跳转至支付宝提供的中间页，提示会进行跳转。点击"点击跳转"之后能唤起APP
 
-<img src="https://cloudmain.futunn.com/test/H5CallUpNative/images/WechatIMG7-c3f1e6630de9197f1e08a5f9f9204cc7.png?_=1538561195372" style="width: 40%;" />
+<img src="./asserts/zfb.png" style="width: 40%;" />
 
 ## 6、研究意义
 **便于通过相关H5页面进入Native客户端，提升用户体验，提升App用户粘度；** 对于未安装客户端的用户，可引导进入下载通道，如下场景图：
 
-![](http://i.imgur.com/ymKiJJM.png)
+![](./asserts/openapp.png)
 
 ## 7、存在的问题
 

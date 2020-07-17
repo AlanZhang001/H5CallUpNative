@@ -29,7 +29,7 @@
     <body>
         <div class="wrap">
             <p>在线地址：</p>
-            <h3>浏览器中唤醒futunn</h3>
+            <h3>浏览器中唤醒app</h3>
             <button id="openNN">打开牛牛客户端</button><br/>
             <a target="_blank" href="futunn://login">在browser打开登陆</a><br/>
             <a target="_blank" href="futunn://homepage">在chrome打开登陆</a><br/>
@@ -44,12 +44,9 @@
         </div>
     </body>
     <script type="text/javascript" src="../index.js?ertwrtwre334"></script>
-    <script type="text/javascript" src="//cloudmain.futunn.com/test/business-qq/dist/vconsole.min.js?_=153848431344562"></script>
     <script type="text/javascript">
 
-        /*globals VConsole*/
-        new VConsole();
-
+    
         /*globals Callup*/
         var callup = new Callup({
             // 协议头
@@ -77,7 +74,7 @@
 
         document.querySelector("#openNN").addEventListener("click",function(){
 
-            var url = "url/" + encodeURIComponent('https://act.futunn.com');
+            var url = "url/" + encodeURIComponent('https://www.qq.com');
 
             callup.loadSchema({
                 // 通过NN打开某个链接

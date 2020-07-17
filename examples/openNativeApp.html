@@ -28,17 +28,16 @@
     </head>
     <body>
         <div class="wrap">
-            <p>在线地址：</p>
             <h3>浏览器中唤醒app</h3>
             <button id="openNN">打开牛牛客户端</button><br/>
-            <a target="_blank" href="futunn://login">在browser打开登陆</a><br/>
-            <a target="_blank" href="futunn://homepage">在chrome打开登陆</a><br/>
-            <a target="_blank" href="intent://url/https%3A%2F%2Fnews.futunn.com%2Fmarket%2F12613#Intent;
-                scheme=futunn;
-                package=cn.futu.trader;
+            <a target="_blank" href="xxxx://login">在browser打开登陆</a><br/>
+            <a target="_blank" href="xxxx://homepage">在chrome打开登陆</a><br/>
+            <a target="_blank" href="intent://url/https%3A%2F%2Fnews.xxxx.com%2Fmarket%2F12613#Intent;
+                scheme=xxxx;
+                package=cn.xx.xxx;
                 category=android.intent.category.DEFAULT;
                 action=android.intent.action.VIEW;
-                S.browser_fallback_url=http://a.app.qq.com/o/simple.jsp?pkgname=cn.futu.trader&g_f=991653;
+                S.browser_fallback_url=http://a.app.qq.com/o/simple.jsp?pkgname=cn.xxx.xxx&g_f=991653;
                 end">在chrome打开NEWS
             </a>
         </div>
@@ -50,20 +49,20 @@
         /*globals Callup*/
         var callup = new Callup({
             // 协议头
-            PROTOCAL:'ftnn',
+            PROTOCAL:'xxxx',
 
             // 主页
             HOME: 'quote',
 
             // 唤起失败时的跳转链接
             FAILBACK: {
-                ANDROID: 'http://a.app.qq.com/o/simple.jsp?pkgname=cn.futu.trader&g_f=991653',
-                IOS:'http://a.app.qq.com/o/simple.jsp?pkgname=cn.futu.trader&g_f=991653'
+                ANDROID: 'http://a.app.qq.com/o/simple.jsp?pkgname=cn.xxx.trader&g_f=991653',
+                IOS:'http://a.app.qq.com/o/simple.jsp?pkgname=cn.xxx.trader&g_f=991653'
             },
 
             // Android apk 相关信息
             APK_INFO: {
-                PKG: 'cn.futu.trader',
+                PKG: 'cn.xxx.trader',
                 CATEGORY: 'android.intent.category.DEFAULT',
                 ACTION: 'android.intent.action.VIEW'
             },
@@ -82,7 +81,7 @@
                 success:function(){
                 },
                 fail: function(){
-                    window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=cn.futu.trader&g_f=991653';
+                    window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=cn.xxx.trader&g_f=991653';
                 }
             });
         });

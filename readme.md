@@ -1,6 +1,6 @@
 # 关于通过H5页面唤Native户端的介绍
 
-本文档用于介绍通过H5端唤起本地富途牛牛客户端的研究过程！起初是一些研究性质的文章，随着越来越多的人关注和提issue，所以这里做了一些更新。
+本文档用于介绍通过H5端唤起本地app客户端的研究过程！起初是一些研究性质的文章，随着越来越多的人关注和提issue，所以这里做了一些更新。
 
 **快速使用见 5、相关代码**
 
@@ -40,15 +40,15 @@
 
 1.**通过a标签打开**，点击标签时启动APP
 ```html
-<a href="ftnn:login">打开登录页</a>
+<a href="xxxx:login">打开登录页</a>
 ```
 2.**通过iframe打开**，设置iframe.src即会启动
 ```html
-<iframe src="ftnn:login"></iframe>
+<iframe src="xxxx:login"></iframe>
 ```
 3.**直接通过window.location 进行跳转**
 ```js
-window.location.href= "ftnn:login";
+window.location.href= "xxxx:login";
 ```
 
 Android上实现注册schema协议，可以参考博文：[Android手机上实现WebApp直接调起NativeApp](https://www.baidufe.com/item/3444ee051f8edb361d12.html)
@@ -71,10 +71,10 @@ Android上实现注册schema协议，可以参考博文：[Android手机上实�
 intent:
 login                                                // 特定的schema uri，例如login表示打开NN登陆页
 #Intent;
-    package=cn.xxxx.xxxxxx;                          // 富途牛牛apk信息
-    action=android.intent.action.VIEW;               // 富途牛牛apk信息
-    category=android.intent.category.DEFAULT;        // 富途牛牛apk信息
-    component=[string];                              // 富途牛牛apk信息,可选
+    package=cn.xxxx.xxxxxx;                          // apk信息
+    action=android.intent.action.VIEW;               // apk信息
+    category=android.intent.category.DEFAULT;        // apk信息
+    component=[string];                              // apk信息,可选
     scheme=xxxx;                                     // 协议类型
     S.browser_fallback_url=[url]                     //可选，schema启动客户端失败时的跳转页，一般为下载页，需通过encodeURIComponent编码
 end;
@@ -83,7 +83,7 @@ end;
 2.构造一个a标签，将上面schame 字符串作为其href值，当点击a标签时，即为通过schema打开某客户端登陆页，如果未安装客户端，则会跳转到指定页，这里会跳转到下载页；
 
 ```html
-<a href="intent://loin#Intent;scheme=ftnn;package=cn.futu.trader;category=android.intent.category.DEFAULT;action=android.intent.action.VIEW;S.browser_fallback_url=http%3A%2F%2Fa.app.qq.com%2Fo%2Fsimple.jsp%3Fpkgname%3Dcn.futu.trader%26g_f%3D991653;end">打开登录页</a>
+<a href="intent://loin#Intent;scheme=xx;package=cn.xxxx.trader;category=android.intent.category.DEFAULT;action=android.intent.action.VIEW;S.browser_fallback_url=http%3A%2F%2Fa.app.qq.com%2Fo%2Fsimple.jsp%3Fpkgname%3Dcn.xxxx.trader%26g_f%3D991653;end">打开登录页</a>
 ```
 
 #### 2.3 Universal links
@@ -319,20 +319,20 @@ var CallUp = require('tool-callapp');
 
 var callup = new Callup({
     // 协议头
-    PROTOCAL:'ftnn',
+    PROTOCAL:'xxxx',
 
     // 主页
     HOME: 'quote',
 
     // 唤起失败时的跳转链接
     FAILBACK: {
-        ANDROID: 'http://a.app.qq.com/o/simple.jsp?pkgname=cn.futu.trader&g_f=991653',
-        IOS:'http://a.app.qq.com/o/simple.jsp?pkgname=cn.futu.trader&g_f=991653'
+        ANDROID: 'http://a.app.qq.com/o/simple.jsp?pkgname=cn.xxxx.trader&g_f=991653',
+        IOS:'http://a.app.qq.com/o/simple.jsp?pkgname=cn.xxxx.trader&g_f=991653'
     },
 
     // Android apk 相关信息
     APK_INFO: {
-        PKG: 'cn.futu.trader',
+        PKG: 'cn.xxxx.trader',
         CATEGORY: 'android.intent.category.DEFAULT',
         ACTION: 'android.intent.action.VIEW'
     },
@@ -342,7 +342,7 @@ var callup = new Callup({
 });
 
 callup.loadSchema({
-    // 通过NN打开某个链接,注意不包括协议部分，比如打开行情主页的完整schema是ftnn://quote,这里传的值只有uri部分，即quote
+    // 通过NN打开某个链接,注意不包括协议部分，比如打开行情主页的完整schema是xxx://quote,这里传的值只有uri部分，即quote
     targetURI: 'quote'
 });
 

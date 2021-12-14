@@ -6,7 +6,7 @@
 
 ## change log
 
-#### 2019/11/18 
+#### 2019/11/18
 - 发布tool-callapp@1.0.2,调整package.json中 webpack等开发依赖组件的位置，减少冗余安装。建议来自[CaiDi](https://github.com/littleVege)
 
 #### 2018/12/08
@@ -36,7 +36,7 @@
 
 在Android和IOS浏览器中（非微信浏览器），可以通过schema协议的方式唤醒本地app客户端；schema协议在App开发注册之后，与前端进行统一约定，通过H5页面访问某个具体的协议地址，即可打开对应的App客户端 页面；
 
-访问协议地址，目前有3种方式，以打开[富途牛牛](https://play.google.com/store/apps/details?id=cn.futu.trader)客户端登录页为例：
+访问协议地址，目前有3种方式，以打开某APP客户端登录页为例：
 
 1.**通过a标签打开**，点击标签时启动APP
 ```html
@@ -83,7 +83,7 @@ end;
 2.构造一个a标签，将上面schame 字符串作为其href值，当点击a标签时，即为通过schema打开某客户端登陆页，如果未安装客户端，则会跳转到指定页，这里会跳转到下载页；
 
 ```html
-<a href="intent://loin#Intent;scheme=xx;package=cn.xxxx.trader;category=android.intent.category.DEFAULT;action=android.intent.action.VIEW;S.browser_fallback_url=http%3A%2F%2Fa.app.qq.com%2Fo%2Fsimple.jsp%3Fpkgname%3Dcn.xxxx.trader%26g_f%3D991653;end">打开登录页</a>
+<a href="intent://loin#Intent;scheme=xx;package=cn.xxxx.xx;category=android.intent.category.DEFAULT;action=android.intent.action.VIEW;S.browser_fallback_url=http%3A%2F%2Fa.app.qq.com%2Fo%2Fsimple.jsp%3Fpkgname%3Dcn.xxxx.xx%26g_f%3D991653;end">打开登录页</a>
 ```
 
 #### 2.3 Universal links
@@ -326,13 +326,13 @@ var callup = new Callup({
 
     // 唤起失败时的跳转链接
     FAILBACK: {
-        ANDROID: 'http://a.app.qq.com/o/simple.jsp?pkgname=cn.xxxx.trader&g_f=991653',
-        IOS:'http://a.app.qq.com/o/simple.jsp?pkgname=cn.xxxx.trader&g_f=991653'
+        ANDROID: 'http://a.app.qq.com/o/simple.jsp?pkgname=cn.xxxx.xx&g_f=991653',
+        IOS:'http://a.app.qq.com/o/simple.jsp?pkgname=cn.xxxx.xx&g_f=991653'
     },
 
     // Android apk 相关信息
     APK_INFO: {
-        PKG: 'cn.xxxx.trader',
+        PKG: 'cn.xxxx.xx',
         CATEGORY: 'android.intent.category.DEFAULT',
         ACTION: 'android.intent.action.VIEW'
     },

@@ -44,8 +44,8 @@
 
         // 唤起失败时的跳转链接
         FAILBACK: {
-            ANDROID: "http://a.app.qq.com/o/simple.jsp?pkgname=cn.futu.trader&g_f=991653",
-            IOS:"http://a.app.qq.com/o/simple.jsp?pkgname=cn.futu.trader&g_f=991653"
+            ANDROID: "http://a.app.qq.com/o/simple.jsp?pkgname=cn.xxxx.xxxxx&g_f=991653",
+            IOS:"http://a.app.qq.com/o/simple.jsp?pkgname=cn.xxxx.xxxxx&g_f=991653"
         },
 
         // Android apk 相关信息

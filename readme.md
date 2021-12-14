@@ -6,6 +6,9 @@
 
 ## change log
 
+#### 2021/12/14
+- fix readme,功能无变化
+- 添加license文件发布
 #### 2019/11/18
 - 发布tool-callapp@1.0.2,调整package.json中 webpack等开发依赖组件的位置，减少冗余安装。建议来自[CaiDi](https://github.com/littleVege)
 

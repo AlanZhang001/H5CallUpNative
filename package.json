@@ -1,6 +1,6 @@
 {
   "name": "tool-callapp",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "本文档用于介绍通过H5端唤起本地NN客户端的研究过程！",
   "main": "index.js",
   "directories": {
